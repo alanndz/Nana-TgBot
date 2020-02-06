@@ -1,6 +1,7 @@
 covid
 requests
 https://github.com/AyraHikari/pyrogram/archive/asyncio-dev.zip
+git+https://github.com/hbmartin/pytube3.git
 TgCrypto
 pydrive
 sqlalchemy
