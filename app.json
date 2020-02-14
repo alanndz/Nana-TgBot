@@ -76,6 +76,10 @@
       "value": "False",
       "required": false
     },
+    "bitly_token": {
+      "description": "(optional) Register at : https://http://app.bitly.com/ profile settings -> generic access token",
+      "required": false
+    },
     "USERBOT_LOAD": {
       "description": "(optional) Fill if you want to load that module only, else leave it blank",
       "required": false
