@@ -17,3 +17,4 @@ googletrans
 currencyconverter
 gsearch
 bitlyshortener
+speedtest-cli
