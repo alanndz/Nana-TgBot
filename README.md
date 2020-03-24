@@ -132,7 +132,8 @@ To get update, type `update now` in your nana bot.
 
 Or you can update via Assistant (If they notify you), just click Update Now and wait for update.
 
-### Credits
+# Credits
 
+- [Nana-TgBot Source Base](https://github.com/Hyakei/Nana-TgBot)
 - [Telegram Userbot](https://github.com/RaphielGang/Telegram-UserBot)
 - [Paperlane Extended](https://github.com/AvinashReddy3108/PaperplaneExtended)
