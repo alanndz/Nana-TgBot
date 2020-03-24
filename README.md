@@ -32,7 +32,7 @@ A: Because real bot will help you a lot for many things, and make user easy to u
 
 ### Installation Guide
 
-[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/AyraHikari/Nana-TgBot)
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/alanndz/Nana-TgBot)
 
 See our wikis to get [Installation Guide](https://github.com/AyraHikari/Nana-TgBot/wiki).
 
