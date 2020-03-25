@@ -29,10 +29,6 @@
       "description": "Get this value from https://my.telegram.org/apps",
       "value": ""
     },
-    "Owner": {
-      "description": "Go to some bot, and check your id there. Ex. Emilia or Rose.",
-      "value": ""
-    },
     "Command": {
       "description": "Prefix command, separate by space.",
       "value": "."
