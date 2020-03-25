@@ -89,7 +89,7 @@ async def git(client, message):
 	if not argv[1] in ["clone", "dir", "patch"]:
 		pwd = dir + "/" + conf["local"]
 		cmd = "git " + args[1]
-	teks = "python helper.py " + pwd + " " + cmd
+	teks = "python3 helper.py " + pwd + " " + cmd
 	if "\n" in teks:
 		code = teks.split("\n")
 		output = ""
