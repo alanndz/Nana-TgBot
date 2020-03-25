@@ -12,8 +12,8 @@
     "productivity",
     "testing"
   ],
-  "repository": "https://github.com/AyraHikari/Nana-TgBot",
-  "website": "https://github.com/AyraHikari/Nana-TgBot/wiki",
+  "repository": "https://github.com/alanndz/Nana-TgBot",
+  "website": "https://github.com/alanndz/Nana-TgBot/wiki",
   "success_url": "https://t.me/AyraSupport",
   "stack": "container",
   "env": {
@@ -35,7 +35,7 @@
     },
     "Command": {
       "description": "Prefix command, separate by space.",
-      "value": "! ."
+      "value": "."
     },
     "AdminSettings": {
       "description": "Fill your telegram id",
@@ -103,10 +103,12 @@
       "description": "[REQUIRED] For make a session: https://github.com/AyraHikari/pyrogram-session-maker"
     },
     "GOOGLE_API_TEXT": {
-      "description": "(optional) Open client_secrets.json from your google drive API, copy all then paste in here"
+      "description": "(optional) Open client_secrets.json from your google drive API, copy all then paste in here",
+      "required": false
     },
     "BITLY_API": {
-      "description": "(optional) Fill your Bitly API, register here: https://dev.bitly.com/my_apps.html"
+      "description": "(optional) Fill your Bitly API, register here: https://dev.bitly.com/my_apps.html",
+      "required": false
     }
   },
   "addons": [
