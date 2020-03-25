@@ -51,7 +51,7 @@ USERBOT_VERSION = "0.3.3"
 ASSISTANT_VERSION = "0.3.3"
 
 OFFICIAL_BRANCH = ('master', 'dev', 'asyncio')
-REPOSITORY = "https://github.com/AyraHikari/Nana-TgBot"
+REPOSITORY = "https://github.com/alanndz/Nana-TgBot"
 RANDOM_STICKERS = ["CAADAgAD6EoAAuCjggf4LTFlHEcvNAI", "CAADAgADf1AAAuCjggfqE-GQnopqyAI", "CAADAgADaV0AAuCjggfi51NV8GUiRwI"]
 
 BOT_SESSION = "nana/session/ManageBot"
