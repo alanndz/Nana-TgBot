@@ -92,6 +92,9 @@
       "description": "(optional) Fill if you dont want to load that module, else leave it blank",
       "required": false
     },
+    "ASSISTANT_BOT_TOKEN": {
+      "description": "[REQUIRED] Fill BOT Token from @BotFather"
+    },
     "USERBOT_SESSION": {
       "description": "[REQUIRED] For make a session: https://github.com/AyraHikari/pyrogram-session-maker"
     },
