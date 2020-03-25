@@ -30,7 +30,7 @@ Q: Why need Assistant (Real bot)?
 A: Because real bot will help you a lot for many things, and make user easy to use it.
 ```
 
-### Installation Guide
+# Installation Guide
 
 [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/alanndz/Nana-TgBot)
 
@@ -64,17 +64,6 @@ AdminSettings = [388576209] # From guide no 3
 
 Then you ready to go next guide
 
-## Install Requirements
-
-Install all requirements by python, in your terminal type this:
-```
-pip install -r requirements.txt
-```
-
-If you're using pipenv, use this instead:
-```
-pipenv install -r requirements.txt
-```
 
 ## Install Database
 
@@ -85,9 +74,19 @@ This is required for some features, if you want to use database, follow this gui
 sudo apt-get update && sudo apt-get install postgresql
 ```
 
-- Change user to postgres
+- Change user to postgres (no need if you use termux)
 ```
 sudo su - postgres
+```
+
+- Initial, Change YOUR_FOLDER what you want, ex: .pg
+```
+initdb YOUR_FOLDER
+```
+
+- Start postgres
+```
+pg_ctl -D YOUR_FOLDER start
 ```
 
 - Create a user, change **YOUR_USER** with you own user
@@ -108,6 +107,18 @@ psql YOUR_DB_NAME -h YOUR_HOST YOUR_USER
 - After create a database, your database URL should be like this
 ```
 sqldbtype://YOUR_USER:password@localhost:5432/YOUR_DB_NAME
+```
+
+## Install Requirements
+
+Install all requirements by python, in your terminal type this:
+```
+pip install -r requirements.txt
+```
+
+If you're using pipenv, use this instead:
+```
+pipenv install -r requirements.txt
 ```
 
 ## Run NanaBot and Assistant
