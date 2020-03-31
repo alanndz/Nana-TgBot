@@ -44,6 +44,7 @@ async def corona(client, message):
         output_text += "`Recovered   : {}`\n".format(country_data["recovered"])
         output_text += "`Last update : {}`\n". \
             format(datetime.utcfromtimestamp(country_data["last_update"] // 1000).strftime('%Y-%m-%d %H:%M:%S'))
+        output_text += "\n"
         output_text += "`Data provided by `<a href=\"https://j.mp/2xf6oxF\">Johns Hopkins University</a>"
     else:
         output_text = "`No information yet about this country!`"
