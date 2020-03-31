@@ -1,17 +1,17 @@
+from nana import app, Command, logging
+from pyrogram import Filters
+
 import asyncio
 import requests
 import datetime
 import os
-import re
-import shutil
-import subprocess
 import sys
-import traceback
 import json
+import shlex
+#import subprocess
 
-from nana import app, Command, logging
-from nana.helpers.parser import mention_markdown
-from pyrogram import Filters
+from shutil import rmtree
+from nana.helpers.proc import Group as process, subprocess
 
 __MODULE__ = "Git"
 __HELP__ = """
@@ -31,13 +31,6 @@ Set default Directory
 -> `patch (url_commit)`
 Execute command shell
 
-──「 **Take log** 」──
--> `log`
-Edit log message, or deldog instead
-
-──「 **Get Data Center** 」──
--> `dc`
-Get user specific data center
 """
 
 cwd = os.getcwd()
@@ -60,6 +53,27 @@ def load_local():
 
 conf = load_local()
 
+async def send_out(client, message, msg):
+	await message.edit("Message Overflow, send as file")
+	with open("nana/cache/output.txt", "w+") as f:
+		f.write(msg)
+
+	if os.path.isfile("nana/cache/output.txt"):
+		await client.send_document(message.chat.id, 
+			"nana/cache/output.txt", 
+			reply_to_message_id=message.message_id, 
+			caption="`Output file`")
+		os.remove("nana/cache/output.txt")
+
+@app.on_message(Filters.user("self") & Filters.command(["loop"], Command))
+async def loop(client, message):
+	x = 0
+	old = ""
+	for i in range(10):
+		old += str(x) + "\n"
+		await message.edit(old)
+		x += 1
+
 @app.on_message(Filters.user("self") & Filters.command(["git"], Command))
 async def git(client, message):
 	if len(message.text.split()) == 1:
@@ -67,78 +81,94 @@ async def git(client, message):
 		return
 	args = message.text.split(None, 1)
 	argv = message.text.split(None, 4)
-	if argv[1] == "clone":
+	argc = message.text.split(None, 2)
+	msg = ""
+	cmd = ""
+	pwd = ""
+	readall = False
+
+	if argc[1] == "test" and argc[2]:
+		cmd = argc[2]
+		open(dir + "/.out", "w").write("")
+		with open(dir + "/.cmd", "w") as f:
+			f.write(cmd + " 2>&1 | tee .out")
+		subprocess.Popen("bash .cmd", shell=True, cwd=dir)
+		with open(dir + "/.out", "r") as f:
+			r = f.read()
+			await message.edit(r)
+		return
+	elif argc[1] == "ls":
+		pwd = dir + "/" + conf["local"]
+		cmd = "du -ah --max-depth=1"
+	elif argv[1] == "delete":
+		if len(argv) < 3:
+			await message.edit("Ussage: `delete` **(folder)**")
+			return
+		lst = []
+		for name in os.listdir(dir):
+			if os.path.isdir(dir + "/" + name):
+				lst.append(name)
+		if not argv[2] in lst:
+			await message.edit("Folder not available\nCheck folder with `.git dir`")
+			return
+		rmtree(dir + "/" + argv[2], ignore_errors=True)
+		await message.edit("Success delete folder {}".format(argv[2]))
+	if argv[1] == "clone" and argv[2]:
 		pwd = dir
 		cmd = "git clone {} {}".format(argv[2], dir + "/" + argv[3])
-	elif argv[1] == "dir" and argv[2]:
+	elif argv[1] == "dir":
 		if argv[2] == "ls":
 			pwd = dir
-			cmd = "ls"
+			cmd = "du -ah --max-depth=1"
 		else:
 			conf.update({'local' : argv[2]})
 			with open(git_conf,'w') as f:
 				json.dump(conf, indent=4, fp=f)
 			await message.edit("Successfully changed to `{}`".format(argv[2]))
 			return
-	elif argv[1] == "patch":
+	elif argv[1] == "patch" and argv[2]:
 		pwd = dir + "/" + conf["local"]
 		if argv[2] == "abort":
 			cmd = "git am --abort"
 		else:
 			cmd = "curl {}.patch | git am".format(argv[2])
-	if not argv[1] in ["clone", "dir", "patch"]:
+	if not argv[1] in ["clone", "dir", "patch", "ls"]:
 		pwd = dir + "/" + conf["local"]
 		cmd = "git " + args[1]
-	teks = "python3 helper.py " + pwd + " " + cmd
-	if "\n" in teks:
-		code = teks.split("\n")
-		output = ""
-		for x in code:
-			shell = re.split(''' (?=(?:[^'"]|'[^']*'|"[^"]*")*$)''', x)
-			try:
-				process = subprocess.Popen(
-					shell,
-					stdout=subprocess.PIPE,
-					stderr=subprocess.PIPE
-				)
-			except Exception as err: 
-				await message.edit("""
-**Input:**
-```{}```
 
-**Error:**
-```{}```
-""".format(cmd, err))
-			output += "**{}**\n".format(code)
-			output += process.stdout.read()[:-1].decode("utf-8")
-			output += "\n"
-	else:
-		shell = re.split(''' (?=(?:[^'"]|'[^']*'|"[^"]*")*$)''', teks)
-		for a in range(len(shell)):
-			shell[a] = shell[a].replace('"', "")
-		try:
-			process = subprocess.Popen(
-				shell,
-				stdout=subprocess.PIPE,
-				stderr=subprocess.PIPE
-			)
-		except Exception as err:
-			exc_type, exc_obj, exc_tb = sys.exc_info()
-			errors = traceback.format_exception(etype=exc_type, value=exc_obj, tb=exc_tb)
-			await message.edit("""**Input:**\n```{}```\n\n**Error:**\n```{}```""".format(cmd, "".join(errors)))
-			return
-		output = process.stdout.read()[:-1].decode("utf-8")
-	if str(output) == "\n":
-		output = None
-	if output:
-		if len(output) > 4096:
-			file = open("nana/cache/output.txt", "w+")
-			file.write(output)
-			file.close()
-			await client.send_document(message.chat.id, "nana/cache/output.txt", reply_to_message_id=message.message_id, caption="`Output file`")
-			os.remove("nana/cache/output.txt")
-			return
-		await message.edit("""**Input:**\n```{}```\n\n**Output:**\n```{}```""".format(cmd, output))
-	else:
-		await message.edit("**Input: **\n`{}`\n\n**Output: **\n`No Output`".format(cmd))
+	if argv[1] in ["diff", "show", "log"]:
+		readall = True
+	# teks = "python3 helper.py " + pwd + " " + cmd
+	if not cmd: return
+	cmd = shlex.split(cmd)
+	if not readall:
+		proc = process()
+		p1 = proc.run(cmd, cwd = pwd)
+
+		while proc.is_pending():
+			lines = proc.readlines()
+			for pr, line in lines:
+				line = line.decode("utf-8")
+				if line == "\n":
+					msg += "\n"
+					continue
+				msg += line
+				try: await message.edit(msg)
+				except: pass
+	else: # if readall is True
+		proc = subprocess.Popen(cmd, 
+			stdout=subprocess.PIPE, 
+			stderr=subprocess.PIPE,
+			cwd=pwd)
+		output = proc.stdout.read()[:-1].decode("utf-8")
+		# output, err = proc.communicate()
+		# line = proc.stdout.read()[:-1]
+		msg = output
+		if len(msg) > 4096:
+			await send_out(client, message, msg)
+		else:
+			if msg != "":
+				asyncio.sleep(5)
+				await message.edit("```{}```".format(msg))
+			else: await message.edit("Return is empty")
 
