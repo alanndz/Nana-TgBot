@@ -34,8 +34,8 @@ async def quotly(client, message):
          progress += random.randint(0,10)
          try:
             await message.edit("```Making a Quote```\nProcessing {}%".format(progress))
-         except:
-            await message.edit("**Error, Can't make Quote!**")
+         except: pass
+
    await message.edit("```Complete !```")
    msg_id = msg[0]["message_id"]
    await app.forward_messages(message.chat.id,"@QuotLyBot",msg_id)
