@@ -3,92 +3,96 @@
 # Licensed under the Raphielscape Public License, Version 1.d (the "License");
 # you may not use this file except in compliance with the License.
 #
+# Port to Nana-TgBot by alanndz
+#
 
 import asyncio
 from asyncio import wait, sleep
 
-from userbot import BOTLOG, BOTLOG_CHATID, CMD_HELP
-from userbot.events import register
+from nana import app, Command, logging
+from pyrogram import Filters
 
+__MODULE__ = "Spams"
+__HELP__ = """
+──「 **Spammer** 」──
+-> `spam (count) (text)`
+Floods text in the chat!
 
-@register(outgoing=True, pattern="^.cspam (.*)")
-async def tmeme(e):
-    cspam = str(e.pattern_match.group(1))
-    message = cspam.replace(" ", "")
-    await e.delete()
-    for letter in message:
-        await e.respond(letter)
-    if BOTLOG:
-        await e.client.send_message(
-            BOTLOG_CHATID, "#CSPAM\n"
-            "TSpam was executed successfully")
+──「 **Spam letter** 」──
+-> `cspam (text)`
+Spam the text letter by letter.
 
+──「 **Spam word** 」──
+-> `wspam (text)`
+Spam the text word by word.
 
-@register(outgoing=True, pattern="^.wspam (.*)")
-async def tmeme(e):
-    wspam = str(e.pattern_match.group(1))
-    message = wspam.split()
-    await e.delete()
-    for word in message:
-        await e.respond(word)
-    if BOTLOG:
-        await e.client.send_message(
-            BOTLOG_CHATID, "#WSPAM\n"
-            "WSpam was executed successfully")
+──「 **Pic Spam [Disabled/Not Work]** 」──
+-> `picspam (count) (link to image/gif)`
+As if text spam was not enough !!
 
+──「 **Spam Delay** 」──
+-> `delayspam (delay) (count) (text)`
+Floods text with delay int the chat!
 
-@register(outgoing=True, pattern="^.spam (.*)")
-async def spammer(e):
-    counter = int(e.pattern_match.group(1).split(' ', 1)[0])
-    spam_message = str(e.pattern_match.group(1).split(' ', 1)[1])
-    await e.delete()
-    await asyncio.wait([e.respond(spam_message) for i in range(counter)])
-    if BOTLOG:
-        await e.client.send_message(BOTLOG_CHATID, "#SPAM\n"
-                                    "Spam was executed successfully")
+NOTE : Spam at your own risk !!"
+"""
 
+@app.on_message(Filters.user("self") & Filters.command(["cspam"], Command))
+async def tmeme(client, message):
+    cspam = message.text.split(None, 1)
+    if len(cspam) == 1:
+        await message.edit("Usage: `cspam` (text)")
+        return
+    msg = cspam[1].replace(" ", "")
+    await message.delete()
+    for letter in msg:
+        await client.send_message(message.chat.id, letter)
 
-@register(outgoing=True, pattern="^.picspam")
-async def tiny_pic_spam(e):
-    message = e.text
-    text = message.split()
-    counter = int(text[1])
-    link = str(text[2])
-    await e.delete()
-    for i in range(1, counter):
-        await e.client.send_file(e.chat_id, link)
-    if BOTLOG:
-        await e.client.send_message(
-            BOTLOG_CHATID, "#PICSPAM\n"
-            "PicSpam was executed successfully")
+@app.on_message(Filters.user("self") & Filters.command(["wspam"], Command))
+async def tmemes(client, message):
+    args = message.text.split(None, 1)
+    if len(args) == 1:
+        await message.edit("Usage: `wspam` (text)")
+        return
+    msg = args[1].split()
+    await message.delete()
+    for word in msg:
+        await client.send_message(message.chat.id, word)
 
+@app.on_message(Filters.user("self") & Filters.command(["spam"], Command))
+async def spammer(client, message):
+    args = message.text.split(None, 2)
+    if len(args) == 1:
+        await message.edit("Usage: `spam` (counter) (text)")
+        return
+    counter = int(args[1])
+    spam_message = str(args[2])
+    await message.delete()
+    await asyncio.wait([client.send_message(message.chat.id, spam_message) for i in range(counter)])
 
-@register(outgoing=True, pattern="^.delayspam (.*)")
-async def spammer(e):
-    spamDelay = float(e.pattern_match.group(1).split(' ', 2)[0])
-    counter = int(e.pattern_match.group(1).split(' ', 2)[1])
-    spam_message = str(e.pattern_match.group(1).split(' ', 2)[2])
-    await e.delete()
-    for i in range(1, counter):
-        await e.respond(spam_message)
+#@app.on_message(Filters.user("self") & Filters.command(["picspam"], Command))
+async def tiny_pic_spam(client, message):
+    args = message.text.split(None, 2)
+    if len(args) == 1:
+        await message.edit("Usage: `picspam` (count) (link pic/gif)")
+        return
+    counter = int(args[1])
+    link = str(args[2])
+    await message.delete()
+    for i in range(counter):
+        await client.send_document(message.chat.id, link)
+
+@app.on_message(Filters.user("self") & Filters.command(["delayspam"], Command))
+async def spammers(client, message):
+    args = message.text.split(None, 3)
+    if len(args) == 1:
+        await message.edit("Usage: `delayspam` (delay) (count) (text)")
+        return
+    spamDelay = float(args[1])
+    counter = int(args[2])
+    spam_message = str(args[3])
+    await message.delete()
+    for i in range(counter):
+        await client.send_message(message.chat.id, spam_message)
         await sleep(spamDelay)
-    if BOTLOG:
-        await e.client.send_message(
-            BOTLOG_CHATID, "#DelaySPAM\n"
-            "DelaySpam was executed successfully")
 
-
-CMD_HELP.update({
-    "spam":
-    ".cspam <text>\
-\nUsage: Spam the text letter by letter.\
-\n\n.spam <count> <text>\
-\nUsage: Floods text in the chat !!\
-\n\n.wspam <text>\
-\nUsage: Spam the text word by word.\
-\n\n.picspam <count> <link to image/gif>\
-\nUsage: As if text spam was not enough !!\
-\n\n.delayspam <delay> <count> <text>\
-\nUsage: .bigspam but with custom delay.\
-\n\n\nNOTE : Spam at your own risk !!"
-})
