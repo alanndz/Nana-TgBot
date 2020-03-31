@@ -37,6 +37,15 @@ Edit log message, or deldog instead
 ──「 **Get Data Center** 」──
 -> `dc`
 Get user specific data center
+
+──「 **Get Status Bot** 」──
+-> `alive`
+Get Status alive or not for this bot
+
+
+──「 **Get Repo Nana-Bot** 」──
+-> `repo`
+Get Repo For this userbot
 """
 
 
