@@ -179,7 +179,7 @@ async def dc_id(client, message):
 
 @app.on_message(Filters.user("self") & Filters.command(["repo"], Command))
 async def repo(client, message):
-	await message.edit("Click [here](https://github.com/alanndz/Nana-TgBot) to open Nana-TgBot GitHub page.\nClick [here](https://t.me/nanabotsupport) for support Group",disable_web_page_preview=True)
+	await message.edit("Click [here](https://github.com/alanndz/Nana-TgBot) to open Nana-TgBot GitHub page.\nClick [here](https://t.me/userbotindo) for support Group ",disable_web_page_preview=True)
 
 @app.on_message(Filters.user("self") & Filters.command(["alive"], Command))
 async def alive(client, message):
