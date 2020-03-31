@@ -65,15 +65,6 @@ async def send_out(client, message, msg):
 			caption="`Output file`")
 		os.remove("nana/cache/output.txt")
 
-@app.on_message(Filters.user("self") & Filters.command(["loop"], Command))
-async def loop(client, message):
-	x = 0
-	old = ""
-	for i in range(10):
-		old += str(x) + "\n"
-		await message.edit(old)
-		x += 1
-
 @app.on_message(Filters.user("self") & Filters.command(["git"], Command))
 async def git(client, message):
 	if len(message.text.split()) == 1:
