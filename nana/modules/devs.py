@@ -199,5 +199,5 @@ async def alive(client, message):
 	if not me:
 		text += "\nBot is currently turned off, to start bot again, type /settings and click **Start Bot** button"
 	else:
-		text += "\nBot logged in as `{}`\n Go to your assistant for more information!".format(me.first_name)
+		text += "\nBot logged in as `{}`\nGo to your assistant for more information!".format(me.first_name)
 	await message.edit(text)
