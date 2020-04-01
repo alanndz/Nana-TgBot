@@ -16,7 +16,7 @@ Reply To Message Text To Create Quote Sticker
 """
 
 @app.on_message(Filters.user("self") & Filters.command(["q"], Command))
-async def quotly(client, message):    
+async def quotly(client, message):
    if not message.reply_to_message:
       await message.edit("Reply to any users text message")
       return
@@ -35,8 +35,15 @@ async def quotly(client, message):
          try:
             await message.edit("```Making a Quote```\nProcessing {}%".format(progress))
          except: pass
+         if progress > 100:
+             await message.edit("**Making Quote Error**")
+             break
 
-   await message.edit("```Complete !```")
-   msg_id = msg[0]["message_id"]
-   await app.forward_messages(message.chat.id,"@QuotLyBot",msg_id)
-              
+   if is_sticker is True:
+       await message.edit("```Complete !```")
+       time.sleep(2)
+       await message.delete()
+       msg_id = msg[0]["message_id"]
+       await app.forward_messages(message.chat.id,"@QuotLyBot",msg_id)
+
+
