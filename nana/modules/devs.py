@@ -238,6 +238,22 @@ async def speedtest(client, message):
                    f"{result['client']['isp']}"
                    "`")
 
+@app.on_message(Filters.user("self") & Filters.command(["check"], Command))
+async def check(client, message):
+	cli = dir(client)
+	msg = dir(message)
+	txt = """
+**Client :**
+{}
+
+**Message :**
+{}""".format(cli, msg)
+	with open("nana/cache/output_dir.txt", "w") as f:
+		f.write(txt)
+	await message.delete()
+	await client.send_document(message.chat.id,
+		"nana/cache/output_dir.txt")
+	os.remove("nana/cache/output_dir.txt")
 
 def speed_convert(size):
     """
