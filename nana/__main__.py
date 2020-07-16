@@ -127,6 +127,13 @@ async def start_bot():
 	else:
 		await setbot.idle()
 
+def input(msg):
+	try:
+		m = msg.text.split(None, 1)[1]
+	except:
+		m = None
+	return m
+
 if __name__ == '__main__':
 	BOT_RUNTIME = int(time.time())
 	loop.run_until_complete(start_bot())
